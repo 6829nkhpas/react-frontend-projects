@@ -40,7 +40,7 @@ function App() {
             placeholder="Generated Password"
             className="w-full px-4 py-3 bg-transparent text-neon-green border-none focus:outline-none text-lg font-mono tracking-wider"
           />
-          <button
+          <button onClick={window.navigator.clipboard.writeText.bind(window.navigator.clipboard, password)}
             className="copy-btn px-4 py-2 neon-border ml-2 rounded-r-xl font-bold text-white hover:scale-105 transition-transform duration-200"
           >Copy</button>
         </div>
