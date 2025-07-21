@@ -1,4 +1,4 @@
-import { useState ,useCallback} from 'react'
+import { useState ,useCallback,useEffect} from 'react'
 
 import './App.css'
 
@@ -8,8 +8,25 @@ function App() {
   const [includeSymbols, setIncludeSymbols] = useState(false);
   const [password, setPassword] = useState('');
   const generatePassword = useCallback(() => {
+    let pass =" ";
+    let str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (includeNumbers) {
+      str += '0123456789';
+    }
+    if (includeSymbols) {
+      str += '!@#$%^&*()_+[]{}|;:,.<>?';
+    }
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * str.length);
+      pass += str[randomIndex];
+    }
+    setPassword(pass);
 
-  })
+  },[length, includeNumbers, includeSymbols]);
+  useEffect(() => {
+    generatePassword();
+  }
+  , [length, includeNumbers, includeSymbols, generatePassword]);
 
   return (
     <div className='w-full max-w-md mx-auto shadow-md rounded-lg px-4 py-3 my-8 bg-gray-800 text-red-600'>
