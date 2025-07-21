@@ -1,12 +1,48 @@
-# React + Vite
+# Futuristic Password Generator 🔐
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, futuristic password generator built with React and Vite. Instantly generate strong, customizable passwords with a beautiful glassmorphism and neon-inspired UI.
 
-Currently, two official plugins are available:
+![Password Generator Screenshot](src/assets/image.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- Instantly generate secure passwords
+- Customize password length (8–100)
+- Toggle inclusion of numbers and symbols
+- Modern, glassmorphism and neon UI
+- Responsive and accessible design
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or newer recommended)
+- npm or yarn
+
+### Installation
+
+```bash
+npm install
+```
+
+### Run the App
+
+```bash
+npm run dev
+```
+
+Then open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## 📁 Project Structure
+
+- `src/App.jsx` — Main React component
+- `src/App.css` — Custom styles for the futuristic UI
+- `public/` — Static assets
+
+## 🖼️ Screenshot
+
+![App Screenshot](src/assets/image.png)
+
+## 📝 License
+
+MIT
