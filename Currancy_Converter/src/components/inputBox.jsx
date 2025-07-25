@@ -1,6 +1,6 @@
-import React from 'react'
+import React ,{useId} from 'react'
 
-function inputBox({
+function InputBox({
     label,
     amount,
     onAmountChange,
@@ -11,11 +11,13 @@ function inputBox({
     currencyDisable = false,
     className = "",
 }) {
+  const id = useId();
   return (
     <div className={`bg-white p-3 rounded-lg text-sm flex ${className}` }>
         <div className='w-1-2'>
-            <label htmlFor={label} className='text-black/40 mb-2 inline-block'>{label}</label>
+            <label htmlFor="id" className='text-black/40 mb-2 inline-block'>{label}</label>
             <input type="number"
+            id={id}
             className='outline-none w-full bg-transparent py-1.5'
             placeholder='Amount'
             disabled={amountDisable}
@@ -39,4 +41,4 @@ function inputBox({
   )
 }
 
-export default inputBox
+export default InputBox
