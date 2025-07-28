@@ -5,12 +5,12 @@ import Layout from './Layout.jsx'
 import './index.css'
 import Home from './components/Home.jsx'
 import About from './components/About.jsx'
-import Details from './components/Details.jsx'
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
-      <Route path='' element={<Home />} />
+      <Route path='home' element={<Home />} />
       <Route path='about' element={<About />} />
    
       </Route>
