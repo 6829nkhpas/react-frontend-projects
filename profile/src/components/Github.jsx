@@ -3,15 +3,65 @@ import { useEffect ,useState } from 'react'
 
 function Github() {
     const [data,setData] = useState([])
+    const [repos, setRepos] = useState([])
+    const [loading, setLoading] = useState(true)
+
     useEffect(()=>{
-        fetch('https://api.github.com/users/6829nkhpas')
-        .then((response)=>response.json())
-        .then((data)=>{setData(data);console.log(data)})
-        .catch((error)=>console.log(error))
+        const fetchData = async () => {
+            try {
+                // Fetch user data
+                const userResponse = await fetch('https://api.github.com/users/6829nkhpas')
+                const userData = await userResponse.json()
+                setData(userData)
+
+                // Fetch repositories
+                const reposResponse = await fetch('https://api.github.com/users/6829nkhpas/repos?sort=updated&per_page=10')
+                const reposData = await reposResponse.json()
+                
+                // Fetch commit counts for each repo
+                const reposWithCommits = await Promise.all(
+                    reposData.map(async (repo) => {
+                        try {
+                            const commitsResponse = await fetch(`https://api.github.com/repos/6829nkhpas/${repo.name}/commits?per_page=1`)
+                            const commitsData = await commitsResponse.json()
+                            return {
+                                ...repo,
+                                commitCount: commitsData.length > 0 ? repo.stargazers_count : 0
+                            }
+                        } catch {
+                            return {
+                                ...repo,
+                                commitCount: 0
+                            }
+                        }
+                    })
+                )
+                
+                setRepos(reposWithCommits)
+                setLoading(false)
+            } catch (error) {
+                console.log(error)
+                setLoading(false)
+            }
+        }
+
+        fetchData()
     },[])
+
+    if (loading) {
+        return (
+            <div className='min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex justify-center items-center p-4'>
+                <div className='bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 max-w-md w-full border border-white/20 text-center'>
+                    <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto'></div>
+                    <p className='text-white mt-4'>Loading profile...</p>
+                </div>
+            </div>
+        )
+    }
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex justify-center items-center p-4'>
-        <div className='bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 max-w-md w-full border border-white/20'>
+        <div className='bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 max-w-4xl w-full border border-white/20'>
             <div className='text-center space-y-6'>
                 {/* Avatar */}
                 <div className='relative'>
@@ -96,6 +146,60 @@ function Github() {
                 >
                     View GitHub Profile
                 </a>
+
+                {/* Repositories Section */}
+                <div className='pt-8 border-t border-white/20'>
+                    <h2 className='text-2xl font-bold text-white mb-6'>Recent Projects</h2>
+                    <div className='grid gap-4 md:grid-cols-2'>
+                        {repos.map((repo) => (
+                            <div key={repo.id} className='bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors duration-200'>
+                                <div className='flex items-start justify-between mb-2'>
+                                    <h3 className='text-white font-semibold text-lg truncate'>{repo.name}</h3>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                        repo.private ? 'bg-red-500/20 text-red-300' : 'bg-green-500/20 text-green-300'
+                                    }`}>
+                                        {repo.private ? 'Private' : 'Public'}
+                                    </span>
+                                </div>
+                                
+                                {repo.description && (
+                                    <p className='text-gray-300 text-sm mb-3 line-clamp-2'>{repo.description}</p>
+                                )}
+                                
+                                <div className='flex items-center justify-between text-sm text-gray-400'>
+                                    <div className='flex items-center space-x-4'>
+                                        <div className='flex items-center space-x-1'>
+                                            <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 20 20'>
+                                                <path fillRule='evenodd' d='M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z' clipRule='evenodd' />
+                                            </svg>
+                                            <span>{repo.language || 'N/A'}</span>
+                                        </div>
+                                        <div className='flex items-center space-x-1'>
+                                            <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 20 20'>
+                                                <path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z' />
+                                            </svg>
+                                            <span>{repo.stargazers_count}</span>
+                                        </div>
+                                        <div className='flex items-center space-x-1'>
+                                            <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 20 20'>
+                                                <path fillRule='evenodd' d='M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z' clipRule='evenodd' />
+                                            </svg>
+                                            <span>{repo.forks_count}</span>
+                                        </div>
+                                    </div>
+                                    <a 
+                                        href={repo.html_url}
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                        className='text-blue-400 hover:text-blue-300 transition-colors duration-200'
+                                    >
+                                        View →
+                                    </a>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
