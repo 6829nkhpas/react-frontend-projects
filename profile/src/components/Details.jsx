@@ -60,7 +60,7 @@ export default function Details() {
                                   />
                               </svg>
                               <div className="ml-4 text-md tracking-wide font-semibold w-40">
-                                  +44 1234567890
+                                  +91 9065194550
                               </div>
                           </div>
 
